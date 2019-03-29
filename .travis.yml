@@ -1,0 +1,15 @@
+language: go
+
+go:
+  - 1.11.x
+
+install:
+  - go get -u github.com/golang/dep/cmd/dep
+  - dep ensure -v
+
+before_script:
+  - FIXED=$(go fmt $(go list ./... | grep -v "/vendor") | wc -l); if [ $FIXED -gt 0 ]; then echo "gofmt - $FIXED file(s) not formatted correctly, please run gofmt to fix this." && exit 1; fi
+  - FIXED=$(go vet $(go list ./... | grep -v "/vendor") 2>&1); if [ -n "${FIXED}" ]; then echo "go vet failed. $FIXED" && exit 1; fi
+
+script:
+  - go test $(go list ./... | grep -v "/vendor")
