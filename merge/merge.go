@@ -13,10 +13,10 @@ func mapEqual(m, m1 map[string]interface{}) bool {
 	}
 	count := 0
 	for key, value := range m1 {
-		if val, ok := m[key]; !ok || val == nil {
+		if val, ok := m[key]; !ok {
 			return false
 		} else {
-			if value == nil {
+			if value == nil || val == nil {
 				continue
 			}
 			if getType(val) == getType(value) {
