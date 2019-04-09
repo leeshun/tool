@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	ip2 "github.com/leeshun/tool/watch/ip"
+	"github.com/leeshun/tool/watch/ip"
 )
 
 var (
@@ -19,15 +19,19 @@ func init() {
 	}
 }
 
+func printIPInfo() {
+	info := ip.GetIPInfo()
+	if info != "" {
+		timeStr := time.Now().Format("2006-01-02 15:04:05")
+		fmt.Println(fmt.Sprintf("%v\n%v", timeStr, info))
+	}
+}
+
 func main() {
 	ticker := time.NewTicker(time.Duration(*val) * time.Second)
+	go printIPInfo()
 	for range ticker.C {
-		go func() {
-			info := ip2.GetIPInfo()
-			if info != "" {
-				timeStr := time.Now().Format("2006-01-02 15:04:05")
-				fmt.Println(fmt.Sprintf("%v\n%v", timeStr, info))
-			}
-		}()
+		go printIPInfo()
 	}
+	defer ticker.Stop()
 }
